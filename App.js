@@ -40,8 +40,12 @@ export default function App() {
 
   const facebookLogIn = async () => {
     try {
+      await Facebook.initializeAsync({
+        appId: "206059064840807",
+      });
+
       const { type, token, expires, permissions, declinedPermissions } =
-        await Facebook.logInWithReadPermissionsAsync("206059064840807", {
+        await Facebook.logInWithReadPermissionsAsync({
           permissions: ["public_profile"],
         });
 
