@@ -49,6 +49,8 @@ export default function App() {
           permissions: ["public_profile"],
         });
 
+      console.log("token: ", token);
+
       if (type === "success") {
         // Get the user's name using Facebook's Graph API
         fetch(
@@ -56,6 +58,7 @@ export default function App() {
         )
           .then((response) => response.json())
           .then((data) => {
+            console.log("data: ", data);
             setLoggedinStatus(true);
             setUserData(data);
           })
