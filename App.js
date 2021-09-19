@@ -1,26 +1,4 @@
-// import { StatusBar } from "expo-status-bar";
-// import React from "react";
-// import { StyleSheet, Text, View } from "react-native";
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Hello World!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -30,6 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as Facebook from "expo-facebook";
+import nodejs from "nodejs-mobile-react-native";
 
 // console.disableYellowBox = true;
 
@@ -37,6 +16,18 @@ export default function App() {
   const [isLoggedin, setLoggedinStatus] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isImageLoading, setImageLoadStatus] = useState(false);
+
+  useEffect(() => {
+    nodejs.start("main.js");
+    // nodejs.channel.addListener(
+    //   "message",
+    //   (msg) => {
+    //     // alert("From node: " + msg);
+    //     console.log("From node: " + msg);
+    //   },
+    //   this
+    // );
+  }, []);
 
   const facebookLogIn = async () => {
     try {
