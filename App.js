@@ -44,7 +44,7 @@ export default function App() {
         appId: "206059064840807",
       });
 
-      const { type, token, expires, permissions, declinedPermissions } =
+      const { type, token, expirationDate, permissions, declinedPermissions } =
         await Facebook.logInWithReadPermissionsAsync({
           permissions: ["public_profile"],
         });
