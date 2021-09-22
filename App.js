@@ -1,25 +1,3 @@
-// import { StatusBar } from "expo-status-bar";
-// import React from "react";
-// import { StyleSheet, Text, View } from "react-native";
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Hello World!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
-
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -30,6 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as Facebook from "expo-facebook";
+import { get, post } from "./services/medialServer";
 
 // console.disableYellowBox = true;
 
@@ -53,21 +32,25 @@ export default function App() {
 
       if (type === "success") {
         // Get the user's name using Facebook's Graph API
-        fetch(
+        const response = await fetch(
           `https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.height(500)`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("data: ", data);
-            setLoggedinStatus(true);
-            setUserData(data);
-          })
-          .catch((e) => console.log(e));
+        );
+
+        const data = await response?.json();
+        if (data) {
+          console.log("data: ", data);
+          setLoggedinStatus(true);
+          setUserData(data);
+
+          await post("/users/token", null, { userId: data.id, token });
+          // await get("/users");
+        }
       } else {
         // type === 'cancel'
       }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      alert(`Facebook Login Error: ${error.message}`);
     }
   };
 
@@ -82,7 +65,7 @@ export default function App() {
       <View style={styles.container}>
         <Image
           style={{ width: 200, height: 200, borderRadius: 50 }}
-          source={{ uri: userData.picture.data.url }}
+          source={{ uri: userData.picture?.data?.url }}
           onLoadEnd={() => setImageLoadStatus(true)}
         />
         <ActivityIndicator
